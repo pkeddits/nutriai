@@ -1,0 +1,9 @@
+{
+  "name": "nutriai-frontend",
+  "version": "1.0.0",
+  "description": "NutriAI — frontend estático + serverless functions Vercel",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

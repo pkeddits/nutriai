@@ -1,5 +1,7 @@
 {
   "rewrites": [
-    { "source": "/env.js", "destination": "/api/env" }
+    { "source": "/env.js",  "destination": "/api/env" },
+    { "source": "/api/health", "destination": "/api/health" },
+    { "source": "/api/ai",     "destination": "/api/ai" }
   ]
 }

@@ -1,96 +1,123 @@
 # NutriAI 🥗
 
-Sistema SaaS de nutrição com IA real, desenvolvido como projeto de ADS (Análise e Desenvolvimento de Sistemas).
+Sistema SaaS de nutrição com IA, 100% deploy gratuito na Vercel.
 
-**Stack:** HTML/CSS/JS vanilla · Node.js + Express · Supabase · Groq Cloud
+**Stack:** HTML/CSS/JS · Vercel Serverless Functions · Supabase · Groq Cloud
 
 ---
 
 ## ✨ Funcionalidades
 
-- **Dashboard** com KPIs de macros, refeições do dia, análise semanal, streak
-- **Refeições** com cards visuais por tipo (Café, Almoço, Lanche, Jantar, Ceia) e IA que estima calorias
-- **Planner Semanal** com geração por IA (preview + salvar em lote + editar com IA)
-- **Lista de Compras** com geração por IA organizada por categoria
-- **Progresso** com gráficos SVG, score nutricional 0-100, histórico de peso
-- **IA Nutricional** com 5 modos: chat, gerar dieta, receitas, substituições, histórico
-- **Perfil** com cálculo TDEE/Mifflin-St Jeor
-- **Configurações** com preferências e estatísticas
-- **Chatbot flutuante** contextual em todas as páginas
-- **Guias dismissíveis** explicando cada funcionalidade
-- Esqueci minha senha · Notificações inteligentes · Logout instantâneo
+- Dashboard com KPIs de macros, streak, análise semanal
+- Refeições com cards visuais por tipo + IA estimando calorias
+- Planner Semanal com preview IA + salvar em lote + editar com IA
+- Lista de Compras com preview IA + salvar tudo de uma vez
+- Progresso com gráficos, score nutricional 0-100, histórico de peso
+- IA Nutricional com 5 modos (chat, dieta, receitas, substituições, histórico)
+- Perfil com cálculo TDEE (Mifflin-St Jeor)
+- Configurações com estatísticas, notificações, preferências
+- Chatbot flutuante contextual em todas as páginas
+- Esqueci minha senha · Logout instantâneo · Navegação SPA
 
 ---
 
-## 🚀 Setup Local
+## 📁 Estrutura
 
-### 1. Banco de dados — Supabase
-1. [supabase.com](https://supabase.com) → **New project** → aguarde ~2 min
-2. **SQL Editor** → cole `supabase_schema.sql` → **Run**
-3. **Settings → API** → copie **Project URL** e **anon public** key
+```
+nutriai/
+├── frontend/               ← tudo roda aqui no deploy Vercel
+│   ├── api/                ← serverless functions
+│   │   ├── ai.js           ← chama Groq (substitui o backend Express)
+│   │   ├── env.js          ← injeta credenciais em runtime
+│   │   └── health.js       ← endpoint de teste
+│   ├── scripts/            ← JS do app (SPA)
+│   ├── styles/             ← CSS
+│   ├── app.html · index.html
+│   ├── env.js.example      ← template de credenciais
+│   ├── vercel.json         ← config da Vercel
+│   └── package.json
+├── backend/                ← só pra rodar LOCAL com Express
+│   └── ...
+├── supabase_schema.sql
+└── README.md
+```
+
+**Em produção**, o `backend/` **não é usado** — a Vercel lê o `frontend/api/` e cria endpoints automaticamente.
+
+---
+
+## 🚀 Setup Local (15 min)
+
+### 1. Banco — Supabase
+1. [supabase.com](https://supabase.com) → New project
+2. SQL Editor → cole `supabase_schema.sql` → Run → deve dar `SETUP OK ✓`
+3. Settings → API → copie Project URL e anon key
 
 ### 2. IA — Groq Cloud
 1. [console.groq.com/keys](https://console.groq.com/keys) → entre com Google/GitHub
-2. **Create API Key** → copie (começa com `gsk_`)
+2. Create API Key → copia (começa com `gsk_`)
 
 ### 3. Frontend — credenciais
 ```bash
 cd frontend
-cp env.js.example env.js      # Windows: copy env.js.example env.js
+copy env.js.example env.js
 ```
-Edite `env.js` e preencha suas credenciais do Supabase.
+Edite `env.js` e preencha com URL + anon key do Supabase.
 
-### 4. Backend
+### 4. Backend local (opcional)
 ```bash
 cd backend
-cp .env.example .env          # Windows: copy .env.example .env
+copy .env.example .env
 ```
-Edite `.env` e cole `GROQ_API_KEY=gsk_sua_chave`. Depois:
+Edite `.env` e cole `GROQ_API_KEY=gsk_...`. Depois:
 ```bash
 npm install
 npm run dev
 ```
 
 ### 5. Acesse
-- Landing: http://localhost:3000
-- Sistema: http://localhost:3000/app.html
+- http://localhost:3000 — landing
+- http://localhost:3000/app.html — sistema
 
 ---
 
-## ☁️ Deploy em produção (Vercel + Railway)
+## ☁️ Deploy em produção — tudo na Vercel (grátis)
 
-### Backend → Railway
-1. [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub**
-2. **Root Directory:** `backend`
-3. **Variables:**
-   - `GROQ_API_KEY` → sua chave
-   - `NODE_ENV` → `production`
-   - `FRONTEND_URL` → URL Vercel (colocar depois)
-4. **Settings → Networking → Generate Domain** → copie URL
+### 1. Criar projeto
+1. [vercel.com](https://vercel.com) → Login with GitHub
+2. **Add New Project** → importe `seu-usuario/nutriai`
+3. **Root Directory:** `frontend`
+4. **Framework Preset:** Other
 
-### Frontend → Vercel
-1. [vercel.com](https://vercel.com) → **Add New Project** → importe o repo
-2. **Root Directory:** `frontend` · **Framework:** Other
-3. **Environment Variables** (clique Add em cada uma):
-   - `SUPABASE_URL` → URL do Supabase
-   - `SUPABASE_KEY` → anon key do Supabase
-   - `AI_ENDPOINT` → URL Railway + `/api/ai` (ex: `https://nutriai.up.railway.app/api/ai`)
-4. **Deploy**
+### 2. Environment Variables
+Adicione antes de fazer deploy:
 
-### Ajustes finais
-- Railway → Variables → atualize `FRONTEND_URL` com a URL do Vercel
-- Supabase → Auth → URL Configuration → adicione as URLs da Vercel em **Site URL** e **Redirect URLs**
+| Nome | Valor |
+|---|---|
+| `SUPABASE_URL` | URL do Supabase |
+| `SUPABASE_KEY` | anon key do Supabase |
+| `AI_ENDPOINT` | `/api/ai` |
+| `GROQ_API_KEY` | `gsk_sua_chave` |
+
+### 3. Deploy
+Clique **Deploy**, aguarde ~1 min.
+
+### 4. Testar
+- Health: `https://seu-projeto.vercel.app/api/health` → deve retornar JSON com `"ia":"configured"`
+- App: `https://seu-projeto.vercel.app/app.html`
+
+### 5. Ajustar Supabase
+Supabase → Authentication → URL Configuration:
+- **Site URL:** `https://seu-projeto.vercel.app`
+- **Redirect URLs:** adicione `https://seu-projeto.vercel.app/app.html`
 
 ---
 
-## 🔒 Como as credenciais funcionam
-
-Este projeto **não** faz hardcode de chaves no código:
-
-- **Local:** você cria `frontend/env.js` (gitignored) que injeta `window.ENV.*`
-- **Vercel:** environment variables do painel são servidas via `/api/env` (serverless function). O arquivo `vercel.json` faz rewrite `/env.js → /api/env` automaticamente
-
-Assim o repositório pode ficar **público** sem risco de expor chaves.
+## 🔒 Segurança
+- Credenciais **nunca** hardcoded no código
+- `env.js` local (gitignored) + Vercel Environment Variables em produção
+- RLS Supabase em todas as tabelas
+- Groq key só no servidor (serverless), nunca no navegador
 
 ---
 
@@ -98,11 +125,10 @@ Assim o repositório pode ficar **público** sem risco de expor chaves.
 
 | Problema | Solução |
 |---|---|
-| "SUPABASE_URL ou KEY não configuradas" | Crie `frontend/env.js` a partir do `.example` |
-| "IA indisponível" | Verifique `GROQ_API_KEY` no `.env` do backend |
-| "Salvando..." infinito | Execute `supabase_schema.sql` novamente |
-| Deploy Vercel dá 404 em `/app.html` | Certifique que Root Directory é `frontend` |
-| CORS error em produção | Atualize `FRONTEND_URL` no Railway com a URL exata do Vercel |
+| "SUPABASE_URL não configurada" | Crie `frontend/env.js` (local) ou adicione env vars (Vercel) |
+| `/api/health` retorna "ia":"missing" | Adicione `GROQ_API_KEY` em Environment Variables |
+| Erro 404 no `/app.html` | Root Directory na Vercel deve ser `frontend` |
+| "Salvando..." infinito | Rode `supabase_schema.sql` de novo |
 
 ---
 
