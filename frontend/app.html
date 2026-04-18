@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>NutriAI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles/auth.css"/>
+<link rel="stylesheet" href="styles/app.css"/>
+<link rel="stylesheet" href="styles/pages.css"/>
+</head>
+<body>
+
+<!-- ═══════════ LOADING INICIAL ═══════════ -->
+<div id="boot-loader" class="boot-loader">
+  <div class="boot-logo">
+    <div class="logo-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3C12 3 7 8 7 13C7 16.3 9.2 18.5 12 18.5C14.8 18.5 17 16.3 17 13C17 10 14.5 7.5 13.2 6" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="13.2" cy="5.2" r="2" fill="#fff"/></svg></div>
+    <div class="bw"><span>Nutri</span><span>AI</span></div>
+  </div>
+  <div class="boot-loader-bar"><div class="boot-loader-fill"></div></div>
+</div>
+
+<!-- ═══════════ AUTH ═══════════ -->
+<div id="auth-screen" class="auth-screen" style="display:none">
+  <div class="auth-left">
+    <a href="index.html" class="auth-back">← Voltar ao site</a>
+    <div class="auth-left-content">
+      <div class="auth-brand">
+        <div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3C12 3 7 8 7 13C7 16.3 9.2 18.5 12 18.5C14.8 18.5 17 16.3 17 13C17 10 14.5 7.5 13.2 6" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="13.2" cy="5.2" r="2" fill="#fff"/><circle cx="8.5" cy="15" r="1.3" fill="rgba(255,255,255,.7)"/><circle cx="15.5" cy="16" r="1.3" fill="rgba(255,255,255,.7)"/><line x1="8.5" y1="15" x2="13.2" y2="5.2" stroke="#fff" stroke-width=".8" opacity=".4"/><line x1="15.5" y1="16" x2="13.2" y2="5.2" stroke="#fff" stroke-width=".8" opacity=".4"/><line x1="8.5" y1="15" x2="15.5" y2="16" stroke="#fff" stroke-width=".8" opacity=".4"/></svg></div>
+        <div class="brand-txt"><div class="bw"><span>Nutri</span><span>AI</span></div><div class="bt">nutrition intelligence</div></div>
+      </div>
+      <div class="auth-hero">
+        <h1>Nutrição que<br><em>pensa com você.</em></h1>
+        <p>IA personalizada para sua dieta, objetivos e ritmo de vida.</p>
+      </div>
+      <ul class="auth-feats">
+        <li><span></span>Planos alimentares por IA</li>
+        <li><span></span>Controle de macros em tempo real</li>
+        <li><span></span>Planner semanal inteligente</li>
+        <li><span></span>Lista de compras automática</li>
+      </ul>
+    </div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="atab active" id="tab-login"    onclick="AUTH.switchTab('login')">Entrar</button>
+        <button class="atab"        id="tab-register" onclick="AUTH.switchTab('register')">Cadastrar</button>
+      </div>
+
+      <!-- LOGIN -->
+      <form id="form-login" class="auth-form" onsubmit="event.preventDefault();AUTH.login()">
+        <div class="fhead"><h2>Bem-vindo de volta</h2><p>Continue de onde parou</p></div>
+        <div class="field"><label>E-mail</label>
+          <div class="iwrap">
+            <svg class="ico" viewBox="0 0 20 20" fill="none"><path d="M3 5h14v10H3V5z" stroke="currentColor" stroke-width="1.3"/><path d="M3 5l7 5.5L17 5" stroke="currentColor" stroke-width="1.3"/></svg>
+            <input id="login-email" type="email" placeholder="voce@email.com" autocomplete="email" required/>
+          </div></div>
+        <div class="field">
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <label>Senha</label>
+            <a onclick="AUTH.forgot()" style="font-size:11px;color:var(--acc2);cursor:pointer;font-weight:600">Esqueci minha senha</a>
+          </div>
+          <div class="iwrap">
+            <svg class="ico" viewBox="0 0 20 20" fill="none"><rect x="4" y="9" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 9V6a3 3 0 016 0v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password" required/>
+          </div></div>
+        <div id="login-err" class="msg-err" style="display:none"></div>
+        <div id="login-ok"  class="msg-ok"  style="display:none"></div>
+        <button class="btn-full" id="btn-login" type="submit"><span>Entrar na conta</span><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <p class="switch">Não tem conta? <a onclick="AUTH.switchTab('register')">Criar grátis →</a></p>
+      </form>
+
+      <!-- CADASTRO -->
+      <form id="form-register" class="auth-form" style="display:none" onsubmit="event.preventDefault();AUTH.register()">
+        <div class="fhead"><h2>Criar conta</h2><p>Comece sua jornada nutricional</p></div>
+        <div class="field"><label>Nome completo</label>
+          <div class="iwrap">
+            <svg class="ico" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M4 17c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <input id="reg-nome" type="text" placeholder="Seu nome" autocomplete="name" required/>
+          </div></div>
+        <div class="field"><label>E-mail</label>
+          <div class="iwrap">
+            <svg class="ico" viewBox="0 0 20 20" fill="none"><path d="M3 5h14v10H3V5z" stroke="currentColor" stroke-width="1.3"/><path d="M3 5l7 5.5L17 5" stroke="currentColor" stroke-width="1.3"/></svg>
+            <input id="reg-email" type="email" placeholder="voce@email.com" autocomplete="email" required/>
+          </div></div>
+        <div class="field"><label>Senha</label>
+          <div class="iwrap">
+            <svg class="ico" viewBox="0 0 20 20" fill="none"><rect x="4" y="9" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 9V6a3 3 0 016 0v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <input id="reg-password" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" required/>
+          </div></div>
+        <div id="register-err" class="msg-err" style="display:none"></div>
+        <div id="register-ok"  class="msg-ok"  style="display:none"></div>
+        <button class="btn-full" id="btn-register" type="submit"><span>Criar conta grátis</span><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <p class="switch">Já tem conta? <a onclick="AUTH.switchTab('login')">Entrar →</a></p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ APP PRINCIPAL ═══════════ -->
+<div id="app" class="app" style="display:none">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="tb-left">
+      <button class="tb-menu" onclick="UI.toggleMenu()" aria-label="Menu">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <a href="#/dashboard" class="tb-brand">
+        <div class="logo-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3C12 3 7 8 7 13C7 16.3 9.2 18.5 12 18.5C14.8 18.5 17 16.3 17 13C17 10 14.5 7.5 13.2 6" stroke="#fff" stroke-width="2.1" stroke-linecap="round"/><circle cx="13.2" cy="5.2" r="2" fill="#fff"/></svg></div>
+        <div class="bw"><span>Nutri</span><span>AI</span></div>
+      </a>
+    </div>
+
+    <nav class="tb-nav" id="tb-nav">
+      <a href="#/dashboard"      data-page="dashboard"     class="tb-link">Dashboard</a>
+      <a href="#/refeicoes"      data-page="refeicoes"     class="tb-link">Refeições</a>
+      <a href="#/planner"        data-page="planner"       class="tb-link">Planner</a>
+      <a href="#/lista-compras"  data-page="lista-compras" class="tb-link">Lista</a>
+      <a href="#/progresso"      data-page="progresso"     class="tb-link">Progresso</a>
+      <a href="#/ia"             data-page="ia"            class="tb-link">IA</a>
+    </nav>
+
+    <div class="tb-right">
+      <button class="tb-bell" onclick="NOTIF.toggle(event)" aria-label="Notificações">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M10 2a5 5 0 015 5v3l1.5 3h-13L5 10V7a5 5 0 015-5z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 16a2 2 0 004 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <span class="bell-dot" id="bell-dot" style="display:none"></span>
+      </button>
+
+      <div class="tb-user" id="tb-user" onclick="UI.toggleUser(event)">
+        <div class="uava" id="uava">?</div>
+        <div class="uinfo">
+          <div class="uname" id="uname">—</div>
+          <div class="ugoal" id="ugoal">—</div>
+        </div>
+        <svg class="uchev" id="uchev" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <!-- DROPDOWN USER -->
+      <div class="udd" id="udd" style="display:none">
+        <div class="udd-head">
+          <div class="uava lg" id="uava-lg">?</div>
+          <div>
+            <div class="uname lg" id="uname-lg">—</div>
+            <div class="uemail" id="uemail">—</div>
+          </div>
+        </div>
+        <a class="udd-item" onclick="UI.go('#/perfil');UI.closeUser()"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Meu Perfil</a>
+        <a class="udd-item" onclick="UI.go('#/configuracoes');UI.closeUser()"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M8 2v2M8 12v2M2 8h2M12 8h2M3.5 3.5l1.4 1.4M11.1 11.1l1.4 1.4M3.5 12.5l1.4-1.4M11.1 4.9l1.4-1.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Configurações</a>
+        <div class="udd-div"></div>
+        <a class="udd-item udd-danger" onclick="AUTH.logout()"><svg viewBox="0 0 16 16" fill="none"><path d="M10 8H2m0 0l3-3M2 8l3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 5V3a2 2 0 012-2h4a2 2 0 012 2v10a2 2 0 01-2 2H9a2 2 0 01-2-2v-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Sair da conta</a>
+      </div>
+
+      <!-- DROPDOWN NOTIFICAÇÕES -->
+      <div class="ndd" id="ndd" style="display:none">
+        <div class="ndd-head"><span>Notificações</span><button onclick="NOTIF.markAllRead()">Marcar todas</button></div>
+        <div class="ndd-list" id="ndd-list"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobile-menu" onclick="UI.closeMenu()">
+    <nav onclick="event.stopPropagation()">
+      <a href="#/dashboard"     data-page="dashboard"     class="mm-link" onclick="UI.closeMenu()">Dashboard</a>
+      <a href="#/refeicoes"     data-page="refeicoes"     class="mm-link" onclick="UI.closeMenu()">Refeições</a>
+      <a href="#/planner"       data-page="planner"       class="mm-link" onclick="UI.closeMenu()">Planner</a>
+      <a href="#/lista-compras" data-page="lista-compras" class="mm-link" onclick="UI.closeMenu()">Lista de Compras</a>
+      <a href="#/progresso"     data-page="progresso"     class="mm-link" onclick="UI.closeMenu()">Progresso</a>
+      <a href="#/ia"            data-page="ia"            class="mm-link" onclick="UI.closeMenu()">IA Nutricional</a>
+      <a href="#/perfil"        data-page="perfil"        class="mm-link" onclick="UI.closeMenu()">Perfil</a>
+    </nav>
+  </div>
+
+  <!-- PAGE CONTENT -->
+  <main class="main" id="main"></main>
+</div>
+
+<!-- ═══════════ MODAIS ═══════════ -->
+<div id="modal-setup" class="overlay" style="display:none">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-chip">Configuração inicial</div>
+      <h3>Complete seu perfil</h3>
+      <p>Dados que permitem à IA personalizar tudo para você</p>
+    </div>
+    <div class="modal-body">
+      <div class="frow3">
+        <div class="field"><label>Peso (kg)</label><input id="su-peso" type="number" step="0.1" placeholder="70"/></div>
+        <div class="field"><label>Altura (cm)</label><input id="su-altura" type="number" placeholder="170"/></div>
+        <div class="field"><label>Idade</label><input id="su-idade" type="number" placeholder="25"/></div>
+      </div>
+      <div class="frow2">
+        <div class="field"><label>Sexo</label>
+          <select id="su-sexo">
+            <option value="">Selecione</option>
+            <option value="masculino">Masculino</option>
+            <option value="feminino">Feminino</option>
+            <option value="outro">Prefiro não informar</option>
+          </select>
+        </div>
+        <div class="field"><label>Atividade</label>
+          <select id="su-ativ">
+            <option value="">Selecione</option>
+            <option value="sedentario">Sedentário</option>
+            <option value="leve">Levemente ativo</option>
+            <option value="moderado">Moderadamente ativo</option>
+            <option value="intenso">Muito ativo</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Objetivo principal</label>
+        <div class="goal-grid">
+          <label class="gopt"><input type="radio" name="su-obj" value="emagrecer"/><div class="gcard"><span>⚡</span><b>Emagrecer</b></div></label>
+          <label class="gopt"><input type="radio" name="su-obj" value="ganhar_massa"/><div class="gcard"><span>💪</span><b>Ganhar massa</b></div></label>
+          <label class="gopt"><input type="radio" name="su-obj" value="manutencao"/><div class="gcard"><span>⚖️</span><b>Manutenção</b></div></label>
+          <label class="gopt"><input type="radio" name="su-obj" value="saude_geral"/><div class="gcard"><span>🌿</span><b>Saúde</b></div></label>
+        </div>
+      </div>
+      <div id="setup-err" class="msg-err" style="display:none"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost-md" onclick="UI.closeModal('modal-setup')">Pular</button>
+      <button class="btn-primary" id="btn-setup-save" onclick="PROFILE.saveSetup()">Salvar e continuar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-pw" class="overlay" style="display:none">
+  <div class="modal modal-sm">
+    <div class="modal-head"><h3>Alterar senha</h3></div>
+    <div class="modal-body">
+      <div class="field"><label>Nova senha</label><input id="mpw-new" type="password" placeholder="Mínimo 6 caracteres"/></div>
+      <div class="field"><label>Confirmar senha</label><input id="mpw-new2" type="password" placeholder="Repita"/></div>
+      <div id="mpw-err" class="msg-err" style="display:none"></div>
+      <div id="mpw-ok" class="msg-ok" style="display:none"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost-md" onclick="UI.closeModal('modal-pw')">Cancelar</button>
+      <button class="btn-primary" onclick="AUTH.changePassword()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-email" class="overlay" style="display:none">
+  <div class="modal modal-sm">
+    <div class="modal-head"><h3>Alterar e-mail</h3><p>Um link de confirmação será enviado</p></div>
+    <div class="modal-body">
+      <div class="field"><label>Novo e-mail</label><input id="mem-new" type="email" placeholder="novo@email.com"/></div>
+      <div id="mem-err" class="msg-err" style="display:none"></div>
+      <div id="mem-ok" class="msg-ok" style="display:none"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost-md" onclick="UI.closeModal('modal-email')">Cancelar</button>
+      <button class="btn-primary" onclick="AUTH.changeEmail()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><svg id="toast-ico" width="16" height="16" viewBox="0 0 16 16" fill="none"></svg><span id="toast-msg"></span></div>
+
+<!-- ═══════════ SCRIPTS ═══════════ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="env.js"></script>
+<script src="scripts/config.js"></script>
+<script src="scripts/state.js"></script>
+<script src="scripts/utils.js"></script>
+<script src="scripts/api.js"></script>
+<script src="scripts/auth.js"></script>
+<script src="scripts/ui.js"></script>
+<script src="scripts/notif.js"></script>
+<script src="scripts/guide.js"></script>
+<script src="scripts/router.js"></script>
+<script src="scripts/ai.js"></script>
+<script src="scripts/pages/dashboard.js"></script>
+<script src="scripts/pages/refeicoes.js"></script>
+<script src="scripts/pages/planner.js"></script>
+<script src="scripts/pages/compras.js"></script>
+<script src="scripts/pages/progresso.js"></script>
+<script src="scripts/pages/config.js"></script>
+<script src="scripts/pages/ia.js"></script>
+<script src="scripts/pages/perfil.js"></script>
+<script src="scripts/app.js"></script>
+</body>
+</html>
