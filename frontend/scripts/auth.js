@@ -1,4 +1,5 @@
-// auth.js — autenticação (login, cadastro, logout, senha, email)
+// auth.js - cuida do login, cadastro, logout e recuperação de senha
+// usa o Supabase Auth pra gerenciar os usuários
 
 const AUTH = {
   switchTab(tab) {

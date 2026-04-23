@@ -1,17 +1,12 @@
 // ══════════════════════════════════════════════════════════
-// router.js — SPA Router com cancelamento + watchdog
-//
-// FIXES críticos nesta versão:
-//   1. Hash igual força re-render (clicar no link atual funciona)
-//   2. Timeout hard de 10s por render — se travar, exibe erro
-//   3. Watchdog: se render demorar >5s, mostra "ainda carregando"
-//      e oferece botão pra re-tentar
+// router.js - controla a navegação entre páginas do sistema
+// basicamente quando o hash da URL muda, carrega a página certa
 // ══════════════════════════════════════════════════════════
 
 const ROUTER = {
-  routes: {},
+  routes: {},      // todas as páginas registradas
   currentPage: null,
-  _renderToken: 0,
+  _renderToken: 0, // evita que dois renders rodem ao mesmo tempo
   _currentCtx:  null,
 
   register(path, module) {

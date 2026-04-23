@@ -1,4 +1,5 @@
-// pages/planner.js — com preview da IA + salvar + editar via chat
+// pages/planner.js - planejamento semanal de refeições
+// a IA gera um plano completo que o usuário pode salvar ou editar
 const PAGE_PLANNER = {
   _plans:   {},     // { "Segunda|Almoço": "descrição" }
   _preview: null,   // objeto { "Segunda|Almoço": "...", ... } gerado pela IA

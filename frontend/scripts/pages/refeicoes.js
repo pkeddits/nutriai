@@ -1,4 +1,5 @@
-// pages/refeicoes.js — UX redesenhada: cards por tipo de refeição
+// pages/refeicoes.js - registro de refeições do dia
+// organiza por tipo (café, almoço, lanche, jantar) e calcula macros
 const PAGE_REFEICOES = {
   _tab: "hoje",  // começa mostrando o dia
   _ctx: null,

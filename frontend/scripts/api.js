@@ -1,16 +1,12 @@
-// ══════════════════════════════════════════════════════════
-// api.js — WRAPPER CRÍTICO para Supabase
-// Sincroniza sessão JWT antes de CADA operação.
-// Isso resolve o "Salvando..." infinito, pois garante que o
-// token não expirou entre operações.
-// ══════════════════════════════════════════════════════════
+// api.js - wrapper pra todas as chamadas ao Supabase
+// verifica se a sessão ainda é válida antes de cada operação
+// evita o problema de "Salvando..." infinito quando o token expira
 
 const API = {
-  _sessionChecked: 0,
+  _sessionChecked: 0,  // timestamp da última verificação
   _sessionInvalid: false,
 
-  // Garante que a sessão está válida antes de qualquer query.
-  // Chama refresh se expirou ou está perto de expirar.
+  // verifica se o usuário ainda está logado antes de qualquer query
   async ensureSession() {
     const now = Date.now();
     // Só revalida se passou mais de 30s desde a última checagem

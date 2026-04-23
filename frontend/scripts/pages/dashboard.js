@@ -1,4 +1,5 @@
-// pages/dashboard.js
+// pages/dashboard.js - página inicial do sistema
+// mostra resumo do dia, macros, refeições e sugestões da IA
 // Padrão: renderiza HTML COMPLETO primeiro (com skeletons), DEPOIS
 // carrega dados. Assim, se o usuário trocar de página durante o await,
 // ctx.ok() retorna false e paramos silenciosamente.

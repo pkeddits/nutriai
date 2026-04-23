@@ -1,4 +1,5 @@
-// pages/progresso.js
+// pages/progresso.js - acompanhamento do progresso nutricional
+// mostra gráficos, score, streak e histórico de peso
 const PAGE_PROGRESSO = {
   _logs:   [],
   _meals7: [],

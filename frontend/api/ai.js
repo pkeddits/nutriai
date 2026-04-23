@@ -1,8 +1,9 @@
-// frontend/api/ai.js — Vercel Serverless Function
-// Substitui o backend Express. Lê process.env do painel Vercel.
+// frontend/api/ai.js — serverless function da Vercel
+// faz a chamada pra IA (Groq) com as configs do projeto
 
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
+// modelos disponíveis no groq, em ordem de preferência
 const MODELS = [
   "llama-3.3-70b-versatile",
   "llama-3.1-8b-instant",
@@ -11,11 +12,18 @@ const MODELS = [
 ];
 
 function buildSystem(tipo, perfil) {
-  let s = `Você é o NutriAI, assistente de nutrição e alimentação saudável.
-Responda SEMPRE em português brasileiro, nunca em inglês.
-Seja prático, direto e motivador. Use **negrito** em pontos-chave, • em listas.
-Seja conciso mas completo.`;
+  // instrução principal - mantém a IA focada em nutrição
+  let s = `Você é o NutriAI, assistente especializado EXCLUSIVAMENTE em nutrição e alimentação saudável.
 
+REGRAS OBRIGATÓRIAS:
+- Responda SEMPRE em português brasileiro
+- Responda APENAS perguntas sobre nutrição, alimentação, dieta, saúde alimentar, receitas e bem-estar físico
+- Se a pergunta não tiver relação com nutrição ou alimentação, recuse educadamente dizendo: "Sou especializado em nutrição e não posso ajudar com esse assunto. Posso te ajudar com dicas alimentares, receitas ou seu plano nutricional?"
+- NUNCA responda perguntas sobre relacionamentos, times de futebol, música, filmes, política ou qualquer outro tema fora de nutrição
+- Seja prático, direto e motivador
+- Use **negrito** em pontos importantes e • em listas`;
+
+  // muda o foco dependendo da aba que o usuário está usando
   const focus = {
     nutricao:     "Foque em dados nutricionais precisos: calorias, proteínas, carboidratos, gorduras, fibras.",
     receita:      "Dê receitas práticas com ingredientes, modo de preparo e calorias estimadas.",
@@ -24,19 +32,20 @@ Seja conciso mas completo.`;
     compras:      "Liste itens por categoria com quantidades para 1 semana.",
     substituicao: "Explique alternativas saudáveis com benefícios nutricionais.",
   };
-  if (focus[tipo]) s += `\nFoco: ${focus[tipo]}`;
+  if (focus[tipo]) s += `\n\nFoco atual: ${focus[tipo]}`;
 
+  // adiciona o perfil do usuário no prompt pra personalizar a resposta
   if (perfil && typeof perfil === "object") {
-    const p = [];
-    if (perfil.nome)            p.push(`Nome: ${perfil.nome}`);
-    if (perfil.peso)            p.push(`Peso: ${perfil.peso}kg`);
-    if (perfil.altura)          p.push(`Altura: ${perfil.altura}cm`);
-    if (perfil.idade)           p.push(`Idade: ${perfil.idade}`);
-    if (perfil.sexo)            p.push(`Sexo: ${perfil.sexo}`);
-    if (perfil.objetivo)        p.push(`Objetivo: ${String(perfil.objetivo).replace(/_/g, " ")}`);
-    if (perfil.nivel_atividade) p.push(`Atividade: ${perfil.nivel_atividade}`);
-    if (perfil.meta_calorias)   p.push(`Meta: ${perfil.meta_calorias}kcal/dia`);
-    if (p.length) s += `\nPerfil: ${p.join(" | ")}. Personalize a resposta.`;
+    const dados = [];
+    if (perfil.nome)            dados.push(`Nome: ${perfil.nome}`);
+    if (perfil.peso)            dados.push(`Peso: ${perfil.peso}kg`);
+    if (perfil.altura)          dados.push(`Altura: ${perfil.altura}cm`);
+    if (perfil.idade)           dados.push(`Idade: ${perfil.idade}`);
+    if (perfil.sexo)            dados.push(`Sexo: ${perfil.sexo}`);
+    if (perfil.objetivo)        dados.push(`Objetivo: ${String(perfil.objetivo).replace(/_/g, " ")}`);
+    if (perfil.nivel_atividade) dados.push(`Atividade: ${perfil.nivel_atividade}`);
+    if (perfil.meta_calorias)   dados.push(`Meta calórica: ${perfil.meta_calorias}kcal/dia`);
+    if (dados.length) s += `\n\nPerfil do usuário: ${dados.join(" | ")}. Use esses dados pra personalizar a resposta.`;
   }
   return s;
 }

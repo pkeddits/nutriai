@@ -1,11 +1,8 @@
-// ══════════════════════════════════════════════════════════
-// app.js — orquestrador principal
-// Fluxo: boot → auth check → se autenticado: app + router
-//                            → se não: tela auth
-// ══════════════════════════════════════════════════════════
+// app.js - arquivo principal que inicializa o sistema
+// verifica se o usuário está logado e carrega a página certa
 
 (async function initApp() {
-  // Verificar config
+  // checa se o config.js foi preenchido antes de tentar conectar
   if (SUPABASE_URL.includes("COLE_SUA") || SUPABASE_KEY.includes("COLE_SUA")) {
     $("boot-loader").innerHTML = `
       <div style="max-width:500px;padding:24px;text-align:center">
@@ -18,12 +15,14 @@
     return;
   }
 
-  // Verificar parâmetro de tab da landing page (?tab=register)
+  // pega o parâmetro tab da url (ex: ?tab=register vindo da landing)
   const params = new URLSearchParams(window.location.search);
   const initTab = params.get("tab");
 
   try {
     const { data: { session } } = await sb.auth.getSession();
+    console.log("sessão atual:", session ? "logado" : "não logado");
+
     if (session?.user) {
       await boot(session.user);
     } else {
@@ -31,11 +30,11 @@
       if (initTab === "register") AUTH.switchTab("register");
     }
   } catch (e) {
-    console.error("[init] auth check:", e.message);
+    console.error("[init] erro ao verificar auth:", e.message);
     showScreen("auth");
   }
 
-  // Escutar mudanças de sessão
+  // escuta quando o usuário faz login/logout
   sb.auth.onAuthStateChange(async (event, session) => {
     console.log("[auth]", event);
     if (event === "SIGNED_IN" && session?.user) {
